@@ -64,7 +64,7 @@ async function enviarMediaParaNuvem() {
  * Rota Principal do Proxy
  * As BitDogs (Picos W) enviam os dados para cá.
  */
-app.post('/proxy', async (req, res) => {
+app.post('/dados', async (req, res) => {
     
     // 1. Pega os dados do corpo da requisição
     const { codigoPlaca, temperatura, umidade } = req.body;
