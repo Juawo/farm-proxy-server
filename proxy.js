@@ -10,8 +10,8 @@ const URL_SERVIDOR_NUVEM = process.env.URL_NUVEM;
 
 const IDS_DAS_PLACAS = new Set([
     "placa_jp", // ID da placa 1
-    "placa_kd",  // ID da placa 2
-    "placa_jv"   // ID da placa 3
+    // "placa_kd",  // ID da placa 2
+    // "placa_jv"   // ID da placa 3
 ]);
 
 // O "estado" (memória) do proxy.
