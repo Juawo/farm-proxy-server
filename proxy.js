@@ -44,9 +44,9 @@ async function enviarMediaParaNuvem() {
 
     // 3. Envia para a nuvem
     try {
-        console.log(`[PROXY] Enviando média para a nuvem em: ${URL_SERVIDOR_NUVEM}`);
+        console.log(`[PROXY] Enviando média para a nuvem em: ${process.env.URL_NUVEM}`);
         
-        await axios.post(URL_SERVIDOR_NUVEM, dadosDeMedia, {
+        await axios.post(process.env.URL_NUVEM, dadosDeMedia, {
             headers: {
                 'Content-Type': 'application/json'
                 // 'Authorization': 'Bearer sua_chave_secreta_aqui' // Se precisar
