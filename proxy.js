@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const PORTA_PROXY = 3000;
 const URL_SERVIDOR_NUVEM = process.env.URL_NUVEM; 
+const API_URL_silos= process.env.API_URL_silos;
 
 const IDS_DAS_PLACAS = new Set([
     "placa_jp", // ID da placa 1
@@ -100,7 +101,54 @@ app.post('/dados', async (req, res) => {
         dataStore.clear();
     }
 });
+    
+// rota do silo
+    app.post('/silo/reading', async (req, res) => {
+  console.log('---------------------------------');
+  console.log('DADOS RECEBIDOS DA PLACA PICO (silos):');
+  console.log(req.body);
+  console.log('---------------------------------');
 
+  try {
+    const { silo_id, level_value } = req.body;
+
+    
+    const dadosParaAPI = {
+      silo_id,
+      level_value
+    };
+
+    console.log(`Encaminhando dados para: ${API_URL}...`);
+    const response = await axios.post(API_URL, dadosParaAPI, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log(`API do Render respondeu com status: ${response.status}`);
+    console.log('Dados encaminhados com sucesso!\n');
+    
+    res.status(200).json({ 
+      status: 'sucesso', 
+      mensagem: 'Dados recebidos e encaminhados pelo proxy.',
+      dados: dadosParaAPI 
+    });
+
+  } catch (error) {
+    console.error('ERRO AO ENCAMINHAR DADOS PARA A API ONLINE:');
+    if (error.response) {
+      console.error(`> Status: ${error.response.status}`);
+      console.error(`> Resposta da API:`, error.response.data);
+    } else if (error.request) {
+      console.error('> Nenhuma resposta recebida da API online. Verifique a URL e a conexão.');
+    } else {
+      console.error('> Erro na configuração do Axios:', error.message);
+    }
+    console.error('---------------------------------\n');
+    
+    res.status(500).send('Erro do proxy ao tentar encaminhar os dados.');
+  }
+});
 // Iniciar o servidor proxy
 app.listen(PORTA_PROXY, () => {
     console.log(`[PROXY] Servidor proxy de MÉDIA rodando na porta ${PORTA_PROXY}`);
